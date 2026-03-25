@@ -287,9 +287,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Your Name**
 
-- LinkedIn: /nguyenquyen1910
-- GitHub: /nguyenquyen1910
-- Email: jrnguyen14@gmail.com
+- GitHub: /khanhnm1401
+- Email: akhanhdepzai@gmail.com
 
 ## 🙏 Acknowledgments
 
