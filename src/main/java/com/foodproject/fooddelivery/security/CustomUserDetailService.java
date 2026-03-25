@@ -22,10 +22,10 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
         Users user;
         if(usernameOrEmail.contains("@")) {
-            user=usersRepository.findByEmail(usernameOrEmail);
+            user=usersRepository.findFirstByEmail(usernameOrEmail);
         }
         else{
-            user=usersRepository.findByUserName(usernameOrEmail);
+            user=usersRepository.findFirstByUserName(usernameOrEmail);
         }
         if(user==null){
             throw new UsernameNotFoundException("User not found");

@@ -45,7 +45,7 @@ public class UserService implements UserServiceImp {
 
     @Override
     public UsersDTO findUserByUsername(String username) {
-        Users users=usersRepository.findByUserName(username);
+        Users users=usersRepository.findFirstByUserName(username);
         return UserMapper.toUsersDTO(users);
     }
 
@@ -85,7 +85,7 @@ public class UserService implements UserServiceImp {
         ResponseData responseDataRes = new ResponseData();
         ResponseData responseData = mailServiceImp.validateCode(email, code);
         if(responseData.isSuccess()) {
-            Users user = usersRepository.findByEmail(email);
+            Users user = usersRepository.findFirstByEmail(email);
             if(passwordEncoder.matches(newPassword, user.getPassword())){
                 responseDataRes.setSuccess(false);
                 responseDataRes.setExist(true);

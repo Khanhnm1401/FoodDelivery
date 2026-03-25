@@ -59,8 +59,9 @@ public class ProductService implements ProductServiceImp {
             responseData.setExist(false);
             responseData.setData(ProductMapper.toProductDTO(product));
         }catch (Exception e){
+            e.printStackTrace();
             responseData.setSuccess(false);
-            responseData.setDescription("Fail");
+            responseData.setDescription("Fail: " + e.getMessage());
         }
         return responseData;
     }

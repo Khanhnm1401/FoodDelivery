@@ -74,10 +74,16 @@ public class FileService implements FileServiceImp {
             String url = uploadResult.get("url").toString();
             responseData.setSuccess(true);
             responseData.setData(url);
-            responseData.setSuccess(true);
-        } catch (IOException io){
-            responseData.setData(io.getMessage());
-            responseData.setSuccess(false);
+        } catch (Exception e){
+            // Fallback to local save if Cloudinary fails (e.g. invalid credentials)
+            boolean isSaved = saveFile(file);
+            if(isSaved) {
+                responseData.setSuccess(true);
+                responseData.setData("http://localhost:8080/products/admin/file/" + file.getOriginalFilename());
+            } else {
+                responseData.setData(e.getMessage());
+                responseData.setSuccess(false);
+            }
         }
         return responseData;
     }

@@ -50,9 +50,10 @@ public class LoginService implements LoginServiceImp {
     @Override
     public ResponseData checkLogin(String usernameOrEmail, String password) {
         ResponseData responseData = new ResponseData();
-        Users user = usersRepository.findByUserNameOrEmail(usernameOrEmail, usernameOrEmail);
-        if(user!=null && passwordEncoder.matches(password, user.getPassword())){
-            List<String> roles = new ArrayList<>();
+        try {
+            Users user = usersRepository.findFirstByUserNameOrEmail(usernameOrEmail, usernameOrEmail);
+            if(user!=null && passwordEncoder.matches(password, user.getPassword())){
+                List<String> roles = new ArrayList<>();
             roles.add(user.getRoles().getRoleName());
             String token = jwtUtilHelper.generateTokens(user.getUserName(), roles);
             UsersDTO usersDTO = userServiceImp.findUserByUsername(user.getUserName());
@@ -64,6 +65,11 @@ public class LoginService implements LoginServiceImp {
             responseData.setSuccess(true);
         } else{
             responseData.setData("Sai tai khoan hoac mat khau!");
+            responseData.setSuccess(false);
+        }
+        } catch(Exception e) {
+            e.printStackTrace();
+            responseData.setData("Lỗi hệ thống: " + e.getMessage());
             responseData.setSuccess(false);
         }
         return responseData;
@@ -101,7 +107,8 @@ public class LoginService implements LoginServiceImp {
             return responseData;
         }
         Roles roles=new Roles();
-        roles.setId(signUpRequest.getRoleId());
+        int roleId = signUpRequest.getRoleId() > 0 ? signUpRequest.getRoleId() : 2;
+        roles.setId(roleId);
         Users users=new Users();
         users.setFullName(signUpRequest.getFullName());
         users.setUserName(signUpRequest.getPhone());
@@ -114,20 +121,26 @@ public class LoginService implements LoginServiceImp {
         users.setCreateDate(signUpRequest.getJoinDate());
         try {
             usersRepository.save(users);
+            Users savedUser = usersRepository.findFirstByUserNameOrEmail(users.getUserName(), users.getEmail());
+            String roleName = "USER";
+            if (savedUser != null && savedUser.getRoles() != null && savedUser.getRoles().getRoleName() != null) {
+                roleName = savedUser.getRoles().getRoleName();
+            }
             List<String> rolesList = new ArrayList<>();
-            rolesList.add(roles.getRoleName());
+            rolesList.add(roleName);
             String token = jwtUtilHelper.generateTokens(users.getUserName(), rolesList);
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
-            response.put("user", UserMapper.toUsersDTO(users));
+            response.put("user", UserMapper.toUsersDTO(savedUser != null ? savedUser : users));
 
             responseData.setData(response);
             responseData.setExist(false);
             responseData.setSuccess(true);
         } catch (Exception e) {
+            e.printStackTrace();
             responseData.setSuccess(false);
             responseData.setExist(false);
-            responseData.setData("Đã xảy ra lỗi trong quá trình đăng ký!");
+            responseData.setData("Lỗi chi tiết: " + e.getMessage());
         }
         return responseData;
     }

@@ -128,7 +128,7 @@ public class UserController {
             responseData.setDescription("User not found");
             return new ResponseEntity<>(responseData, HttpStatus.OK);
         }
-        Users user = usersRepository.findByEmail(email);
+        Users user = usersRepository.findFirstByEmail(email);
         Timestamp createCodeAt = user.getCreateCodeAt();
 
         if(createCodeAt != null) {

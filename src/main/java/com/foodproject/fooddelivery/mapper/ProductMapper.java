@@ -15,7 +15,11 @@ public class ProductMapper {
         productDTO.setImage(product.getImage());
         productDTO.setStatus(product.getStatus());
         productDTO.setPrice(product.getPrice());
-        productDTO.setCategoryName(product.getCategory().getNameCate());
+        if (product.getCategory() != null) {
+            productDTO.setCategoryName(product.getCategory().getNameCate());
+        } else {
+            productDTO.setCategoryName("Không phân loại");
+        }
         return productDTO;
     }
     public static List<ProductDTO> toProductDTOList(List<Product> products) {

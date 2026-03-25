@@ -1,4 +1,0 @@
-cloudinary:
-  cloudName: <YOUR_CLOUDINARY_CLOUD_NAME>
-  apiKey: <YOUR_CLOUDINARY_API_KEY>
-  apiSecret: <YOUR_CLOUDINARY_API_SECRET>

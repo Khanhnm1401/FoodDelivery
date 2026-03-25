@@ -39,7 +39,7 @@ public class MailService implements MailServiceImp {
         Random random = new Random();
         String resetCode = String.format("%06d", random.nextInt(1000000));
 
-        Users user = usersRepository.findByEmail(email);
+        Users user = usersRepository.findFirstByEmail(email);
         if(user != null) {
             user.setVerifyCode(resetCode);
             user.setCreateCodeAt(Timestamp.valueOf(LocalDateTime.now()));
@@ -52,7 +52,7 @@ public class MailService implements MailServiceImp {
     public ResponseData validateCode(String email, String resetCode) {
         ResponseData responseData = new ResponseData();
 
-        Users user = usersRepository.findByEmail(email);
+        Users user = usersRepository.findFirstByEmail(email);
         if(user != null) {
             if(user.getVerifyCode().equals(resetCode)){
                 Timestamp createCodeAt = user.getCreateCodeAt();
@@ -74,7 +74,7 @@ public class MailService implements MailServiceImp {
     @Async
     public ResponseData sentForgotPasswordMail(String fullname, String toAddress, String verifyCode) {
         ResponseData responseData = new ResponseData();
-        Users user = usersRepository.findByEmail(toAddress);
+        Users user = usersRepository.findFirstByEmail(toAddress);
         String subject = "Mã xác nhận đặt lại mật khẩu MYFOOD";
         String content = """
             Xin chào [[name]],<br>

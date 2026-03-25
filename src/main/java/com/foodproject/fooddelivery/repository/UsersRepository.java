@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 public interface UsersRepository extends JpaRepository<Users,Integer> {
     List<Users> findByUserNameAndPassword(String username, String password);
-    Users findByUserName(String userName);
-    Users findByEmail(String email);
-    Users findByUserNameOrEmail(String username, String email);
+    Users findFirstByUserName(String userName);
+    Users findFirstByEmail(String email);
+    Users findFirstByUserNameOrEmail(String username, String email);
     Boolean existsByUserName(String userName);
     Boolean existsByEmail(String email);
     Users findById(int id);

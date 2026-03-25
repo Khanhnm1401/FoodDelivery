@@ -7,3 +7,5 @@ spring:
       - jwt
 mapstruct:
   componentModel: spring
+fileUpload:
+  rootPath: uploads/

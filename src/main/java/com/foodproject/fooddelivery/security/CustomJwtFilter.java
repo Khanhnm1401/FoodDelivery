@@ -38,7 +38,7 @@ public class CustomJwtFilter extends OncePerRequestFilter {
             if(jwtUtilHelper.verifyToken(token)){
                 String username = jwtUtilHelper.extractUsername(token);
                 if(username!=null) {
-                    Users users = usersRepository.findByUserName(username);
+                    Users users = usersRepository.findFirstByUserName(username);
                     if(users!= null){
                         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
                         authorities.add(new SimpleGrantedAuthority("ROLE_" + users.getRoles().getRoleName()));
